@@ -1,4 +1,5 @@
 import pygame as pygame
+import simpleguitk
 
 display_width = 900
 display_height = 700
@@ -27,3 +28,8 @@ CARD_SIZE = (72, 96)
 CARD_CENTER = (36, 48)
 CARD_BACK_SIZE = (72, 96)
 CARD_BACK_CENTER = (36, 48)
+
+
+#btw ez nem az enyem rakerestem, hogy black jack pygame assets es ezt talaltam egy kis ido utan
+card_images = simpleguitk.load_image("http://storage.googleapis.com/codeskulptor-assets/cards_jfitz.png")
+card_back = simpleguitk.load_image("http://storage.googleapis.com/codeskulptor-assets/card_jfitz_back.png")  
