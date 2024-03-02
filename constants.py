@@ -1,8 +1,8 @@
 import pygame as pygame
 import simpleguitk
 
-display_width = 900
-display_height = 700
+display_width = 800
+display_height = 600
 
 backgroun_color = (34,139,34)
 grey = (220,220,220)
