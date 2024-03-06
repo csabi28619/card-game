@@ -1,7 +1,7 @@
 import pygame as pygame
 
-display_width = 1200
-display_height = 1000
+display_width = 900
+display_height = 700
 
 background_color = (34,139,34)
 grey = (220,220,220)

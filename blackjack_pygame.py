@@ -161,7 +161,7 @@ class Play:
             time.sleep(4)
             self.play_or_exit()
         elif self.player.value < self.dealer.value:
-            game_finish("Nagyn szar vagy!", 500, 250, red)
+            game_finish("Nagyon szar vagy!", 500, 250, red)
             time.sleep(4)
             self.play_or_exit()
         else:
