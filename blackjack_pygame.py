@@ -3,16 +3,16 @@ from blackjack_deck import *
 from constants import *
 import sys
 import time
-pygame.init
+pygame.init()
 
 clock = pygame.time.Clock()
 
-gameDisplay = pygame.display.set_mode((display_width,display_height))
+gameDisplay = pygame.display.set_mode((display_width, display_height))
 
+pygame.display.set_caption('FeketeJóska')
+gameDisplay.fill(background_color)
+pygame.draw.rect(gameDisplay, grey, pygame.Rect(0, 0, 250, 700))
 
-pygame.display.set_caption("FeketeJani")
-gameDisplay.fill(backgroun_color)
-pygame.draw.rect(gameDisplay,grey, pygame.Rect(0,0,250,700))
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -23,7 +23,7 @@ def end_text_objects(text, font, color):
     return textSurface, textSurface.get_rect()
 
 
-#game text display
+
 def game_texts(text, x, y):
     TextSurf, TextRect = text_objects(text, textfont)
     TextRect.center = (x, y)
@@ -43,8 +43,8 @@ def black_jack(text, x, y, color):
     TextRect.center = (x, y)
     gameDisplay.blit(TextSurf, TextRect)
     pygame.display.update()
+    
 
-#button display
 def button(msg, x, y, w, h, ic, ac, action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
@@ -61,16 +61,144 @@ def button(msg, x, y, w, h, ic, ac, action=None):
 
 
 class Play:
-    def init(self):
+    def __init__(self):
         self.deck = Deck()
         self.dealer = Hand()
         self.player = Hand()
         self.deck.shuffle()
-
+        
     def blackjack(self):
 
         self.dealer.calc_hand()
         self.player.calc_hand()
 
         show_dealer_card = pygame.image.load('img/' + self.dealer.card_img[1] + '.png').convert()
+        
+        if self.player.value == 21 and self.dealer.value == 21:
+            gameDisplay.blit(show_dealer_card, (550, 200))
+            black_jack("Mindkettőtök FeketeJózsi!", 500, 250, grey)
+            time.sleep(4)
+            self.play_or_exit()
+        elif self.player.value == 21:
+            gameDisplay.blit(show_dealer_card, (550, 200))
+            black_jack("Neked van FeketeJózsid!", 500, 250, green)
+            time.sleep(4)
+            self.play_or_exit()
+        elif self.dealer.value == 21:
+            gameDisplay.blit(show_dealer_card, (550, 200))
+            black_jack("Az osztónak FeketeJózsija van!", 500, 250, red)
+            time.sleep(4)
+            self.play_or_exit()
+            
+        self.player.value = 0
+        self.dealer.value = 0
 
+    def deal(self):
+        for i in range(2):
+            self.dealer.add_card(self.deck.deal())
+            self.player.add_card(self.deck.deal())
+        self.dealer.display_cards()
+        self.player.display_cards()
+        self.player_card = 1
+        dealer_card = pygame.image.load('img/' + self.dealer.card_img[0] + '.png').convert()
+        dealer_card_2 = pygame.image.load('img/back.png').convert()
+            
+        player_card = pygame.image.load('img/' + self.player.card_img[0] + '.png').convert()
+        player_card_2 = pygame.image.load('img/' + self.player.card_img[1] + '.png').convert()
+
+        
+        game_texts("Az osztó keze:", 500, 150)
+
+        gameDisplay.blit(dealer_card, (400, 200))
+        gameDisplay.blit(dealer_card_2, (550, 200))
+
+        game_texts("A te kezed:", 500, 400)
+        
+        gameDisplay.blit(player_card, (300, 450))
+        gameDisplay.blit(player_card_2, (410, 450))
+        self.blackjack()
+            
+            
+
+    def hit(self):
+        self.player.add_card(self.deck.deal())
+        self.blackjack()
+        self.player_card += 1
+        
+        if self.player_card == 2:
+            self.player.calc_hand()
+            self.player.display_cards()
+            player_card_3 = pygame.image.load('img/' + self.player.card_img[2] + '.png').convert()
+            gameDisplay.blit(player_card_3, (520, 450))
+
+        if self.player_card == 3:
+            self.player.calc_hand()
+            self.player.display_cards()
+            player_card_4 = pygame.image.load('img/' + self.player.card_img[3] + '.png').convert()
+            gameDisplay.blit(player_card_4, (630, 450))
+                
+        if self.player.value > 21:
+            show_dealer_card = pygame.image.load('img/' + self.dealer.card_img[1] + '.png').convert()
+            gameDisplay.blit(show_dealer_card, (550, 200))
+            game_finish("Elbasztad!", 500, 250, red)
+            time.sleep(4)
+            self.play_or_exit()
+            
+        self.player.value = 0
+
+        if self.player_card > 4:
+            sys.exit()
+            
+            
+    def stand(self):
+        show_dealer_card = pygame.image.load('img/' + self.dealer.card_img[1] + '.png').convert()
+        gameDisplay.blit(show_dealer_card, (550, 200))
+        self.blackjack()
+        self.dealer.calc_hand()
+        self.player.calc_hand()
+        if self.player.value > self.dealer.value:
+            game_finish("Nyertél!", 500, 250, green)
+            time.sleep(4)
+            self.play_or_exit()
+        elif self.player.value < self.dealer.value:
+            game_finish("Nagyn szar vagy!", 500, 250, red)
+            time.sleep(4)
+            self.play_or_exit()
+        else:
+            game_finish("Döntetlen!", 500, 250, grey)
+            time.sleep(4)
+            self.play_or_exit()
+        
+    
+    def exit(self):
+        sys.exit()
+    
+    def play_or_exit(self):
+        game_texts("Ha akarsz ujra jatszani nyomd meg az osztast!", 200, 80)
+        time.sleep(3)
+        self.player.value = 0
+        self.dealer.value = 0
+        self.deck = Deck()
+        self.dealer = Hand()
+        self.player = Hand()
+        self.deck.shuffle()
+        gameDisplay.fill(background_color)
+        pygame.draw.rect(gameDisplay, grey, pygame.Rect(0, 0, 250, 700))
+        pygame.display.update()
+
+        
+play_blackjack = Play()
+
+running = True
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+        button("Deal", 30, 100, 150, 50, light_slat, dark_slat, play_blackjack.deal)
+        button("Hit", 30, 200, 150, 50, light_slat, dark_slat, play_blackjack.hit)
+        button("Stand", 30, 300, 150, 50, light_slat, dark_slat, play_blackjack.stand)
+        button("EXIT", 30, 500, 150, 50, light_slat, dark_red, play_blackjack.exit)
+    
+    pygame.display.flip()
