@@ -174,7 +174,7 @@ class Play:
         sys.exit()
     
     def play_or_exit(self):
-        game_texts("Ha akarsz ujra jatszani nyomd meg az osztast!", 200, 80)
+        game_texts("Újrajatszáshoz nyomd meg az osztast!", 200, 80)
         time.sleep(3)
         self.player.value = 0
         self.dealer.value = 0
@@ -196,9 +196,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        button("Deal", 30, 100, 150, 50, light_slat, dark_slat, play_blackjack.deal)
-        button("Hit", 30, 200, 150, 50, light_slat, dark_slat, play_blackjack.hit)
-        button("Stand", 30, 300, 150, 50, light_slat, dark_slat, play_blackjack.stand)
-        button("EXIT", 30, 500, 150, 50, light_slat, dark_red, play_blackjack.exit)
+        button("Osztás", 30, 100, 150, 50, light_slat, dark_slat, play_blackjack.deal)
+        button("Lapkérés", 30, 200, 150, 50, light_slat, dark_slat, play_blackjack.hit)
+        button("Kimarad", 30, 300, 150, 50, light_slat, dark_slat, play_blackjack.stand)
+        button("Kilépés", 30, 500, 150, 50, light_slat, dark_red, play_blackjack.exit)
     
     pygame.display.flip()
