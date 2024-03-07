@@ -174,7 +174,7 @@ class Play:
         sys.exit()
     
     def play_or_exit(self):
-        game_texts("Újrajatszáshoz nyomd meg az osztast!", 200, 80)
+        game_texts("", 200, 80)
         time.sleep(3)
         self.player.value = 0
         self.dealer.value = 0
